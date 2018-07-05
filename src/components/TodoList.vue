@@ -5,11 +5,11 @@
         欢迎：{{name}}！你的待办事项是：
       </span>
       <el-input v-model="todos" placeholder="请输入待办事项" @keyup.enter.native="addTodos"></el-input>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="待办事项" name="first">
           <el-col :xs="24">
-            <div v-if="!Done"> <!--v-if和v-for不能同时在一个元素内使用，因为Vue总会先执行v-for-->
-              <div v-for="(item, index) in list">
+            <template v-if="!Done">
+              <template v-for="(item, index) in list">
                 <div class="todo-list" v-if="item.status == false">
                   <span class="item">
                     {{ index + 1 }}. {{ item.content }}
@@ -19,16 +19,16 @@
                     <el-button size="small" :plain="true" type="danger" @click="remove(index)">删除</el-button>
                   </span>
                 </div>
-              </div>
-            </div>
+              </template>
+            </template>
             <div v-else-if="Done">
               暂无待办事项
             </div>
           </el-col>
         </el-tab-pane>
         <el-tab-pane label="已完成事项" name="second">
-          <div v-if="count > 0">
-            <div v-for="(item, index) in list">
+          <template v-if="count > 0">
+            <template v-for="(item, index) in list">
               <div class="todo-list" v-if="item.status == true">
                 <span class="item finished">
                   {{ index + 1 }}. {{ item.content }}
@@ -37,8 +37,8 @@
                   <el-button size="small" type="primary" @click="restore(index)">还原</el-button>
                 </span>
               </div>
-            </div> 
-          </div>
+            </template> 
+          </template>
         </el-tab-pane>
       </el-tabs>
     </el-col>
@@ -74,9 +74,6 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
     addTodos() {
       if (this.todos == '') return;
       let obj = { status: false, content: this.todos };

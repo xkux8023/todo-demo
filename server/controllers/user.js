@@ -1,5 +1,7 @@
 
 const user = require('../models/user.js');
+const jwt = require('koa-jwt');
+const bcrypt = require('bcryptjs');
 
 
 const getUserInfo = async (ctx) => {
@@ -18,7 +20,7 @@ const postUserAuth = async (ctx) => {
   const userInfo = await user.getUserByName(data.name);
 
   if(userInfo != null) {
-    if(userInfo.password != data.password) {
+    if(!bcrypt.compareSync(data.password, userInfo.password)) { // 验证密码是否正确
       ctx.body = {
         success: false,   // success标志位是方便前端判断返回是正确与否
         info: '密码错误！'
@@ -29,7 +31,8 @@ const postUserAuth = async (ctx) => {
         id: userInfo.id
       }
       const secret = 'vue-koa-demo'; // 指定密钥，这是之后用来判断token合法性的标志
-      const token = jwt.sign(userToken,secret); // 签发token
+      const token = jwt({userToken: secret}); // 签发token
+      console.log(token)
       ctx.body = {
         success: true,
         token: token, // 返回token
