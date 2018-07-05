@@ -12,6 +12,38 @@ const getUserInfo = async (ctx) => {
 }
 
 
+const postUserAuth = async (ctx) => {
+  const data = ctx.request.body;      // post过来的数据存在request.body里
+  console.log(data);
+  const userInfo = await user.getUserByName(data.name);
+
+  if(userInfo != null) {
+    if(userInfo.password != data.password) {
+      ctx.body = {
+        success: false,   // success标志位是方便前端判断返回是正确与否
+        info: '密码错误！'
+      }
+    } else {              // 如果密码正确
+      const userToken = {
+        name: userInfo.user_name,
+        id: userInfo.id
+      }
+      const secret = 'vue-koa-demo'; // 指定密钥，这是之后用来判断token合法性的标志
+      const token = jwt.sign(userToken,secret); // 签发token
+      ctx.body = {
+        success: true,
+        token: token, // 返回token
+      }
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      info: '用户不存在！' // 如果用户不存在返回用户不存在
+    }
+  }
+}
+
 module.exports = {
-  getUserInfo // 把获取用户信息的方法暴露出去 
+  getUserInfo, // 把获取用户信息的方法暴露出去 
+  postUserAuth
 }
