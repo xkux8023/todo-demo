@@ -1,6 +1,6 @@
 
 const user = require('../models/user.js');
-const jwt = require('koa-jwt');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 
@@ -31,7 +31,7 @@ const postUserAuth = async (ctx) => {
         id: userInfo.id
       }
       const secret = 'vue-koa-demo'; // 指定密钥，这是之后用来判断token合法性的标志
-      const token = jwt({userToken: secret}); // 签发token
+      const token = jwt.sign(userToken, secret); // 签发token
       console.log(token)
       ctx.body = {
         success: true,

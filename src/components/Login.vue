@@ -50,7 +50,7 @@ export default {
             sessionStorage.setItem('demo-token',null); // 将token清空
           }
         }, (err) => {
-          this.$message.error('请求错误！')
+          this.$message.error('请求错误: ' + err);
           sessionStorage.setItem('demo-token',null); // 将token清空
         })
     }
