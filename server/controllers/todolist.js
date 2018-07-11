@@ -29,7 +29,7 @@ const removeTodolist = async (ctx) => {
 const updateTodolist = async (ctx) => {
   const id = ctx.params['id'];
   const user_id = ctx.params['userId'];
-  const status = ctx.params['status'];
+  let status = ctx.params['status'];
   status == '0' ? status = true : status = false;
   const result = await todolist.updateTodolist(id, user_id, status);
   ctx.body = {
