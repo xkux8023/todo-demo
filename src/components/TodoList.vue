@@ -78,7 +78,7 @@ export default {
       let count = 0;
       let length = this.list.length;
       for (let i in this.list) {
-        this.list[i].status == true ? count += 1 : '';
+        this.list[i].status === 1 ? count += 1 : count += 0;
       }
       this.count = count;
       if (count == length || length == 0) {
