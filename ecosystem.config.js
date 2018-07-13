@@ -16,7 +16,7 @@ module.exports = {
       host : 'xkux8023.cn',
       ref  : 'origin/master',
       repo : 'git@github.com:xkux8023/todo-demo.git',
-      path : '/var/www/production',
+      path : '/var/www/todo-demo',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
     }
   }

@@ -92,7 +92,6 @@ export default {
     addTodos() {
       if (this.todos == '') return;
       let obj = { status: false, content: this.todos, id: this.id };
-      console.log(obj)
       this.$http.post('/api/todolist', obj) // 新增创建请求
         .then((res) => {
           if(res.status == 200){ // 当返回的状态为200成功时
@@ -146,7 +145,6 @@ export default {
     },
     getUserInfo() {   // 获取用户信息
       const token = sessionStorage.getItem('demo-token');
-      console.log('token:' + token);
       if (token != null && token != 'null') {
         let decode = jwt.decode(token);       // 解析token
         return decode; // decode解析出来实际上就是{name: XXX,id: XXX}

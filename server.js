@@ -4,6 +4,7 @@ const logger = require('koa-logger');
 const bodyparser = require('koa-bodyparser');
 const json = require('koa-json');
 const koaJwt = require('koa-jwt');
+const fs = require('fs');
 const path = require('path');
 const serve = require('koa-static');
 const historyApiFallback = require('koa-history-api-fallback');
@@ -17,35 +18,8 @@ app.use(json());
 app.use(logger());
 app.use(bodyparser());
 
-// 将路由规则挂载到Koa上。
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-app.use(async (ctx, next) => {
-  // ctx.body = 'hello koa2';
-  let start = new Date;
-  await next;
-  let ms = new Date - start;
-  console.log('%s %s - %s', ctx.request.method, ctx.request.url, ms); // 显示执行的时间
-});
 
 
-// app.use(async (ctx, next) => {  //  如果JWT验证失败，返回验证失败信息
-//   try {
-//     await next;
-//   } catch (err) {
-//     if (401 == err.status) {
-//       ctx.status = 401;
-//       ctx.body = {
-//         success: false,
-//         token: null,
-//         info: 'Protected resource, use Authorization header to get access'
-//       };
-//     } else {
-//       throw err;
-//     }
-//   }
-// });
 
 
 app.use((ctx, next) => {
@@ -78,9 +52,26 @@ router.use("/api", koaJwt({secret: 'vue-koa-demo'}), api.routes())
 
 
 
+// 将路由规则挂载到Koa上。
+app.use(router.routes());
 // 静态文件serve在koa-router的其他规则之上 
 // 将webpack打包好的项目目录作为Koa静态文件服务的目录
-app.use(serve(path.resolve('dist')));
+
+app.use(serve(path.join(__dirname, './dist')))
+
+
+
+app.use(async (ctx, next) => {
+  // ctx.body = 'hello koa2';
+  let html = await fs.readFileSync(path.resolve(__dirname, './dist/index.html'), 'utf-8');
+  ctx.body = html;
+  let start = new Date;
+  await next;
+  let ms = new Date - start;
+  console.log('%s %s - %s', ctx.request.method, ctx.request.url, ms); // 显示执行的时间
+});
+
+// app.use(serve(path.resolve('dist')));
 app.use(historyApiFallback());
 
 app.listen(8889,() => {
