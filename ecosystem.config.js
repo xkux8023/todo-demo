@@ -17,7 +17,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:xkux8023/todo-demo.git',
       path : '/var/www/todo-demo',
-      'post-deploy' : 'yarn install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'yarn install && yarn build && pm2 reload ecosystem.config.js --env production'
     }
   }
 };
