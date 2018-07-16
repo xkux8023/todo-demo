@@ -60,54 +60,52 @@ export default {
       count: 0
     };
   },
-  created() { // 组件创建时调用
-    const userInfo = this.getUserInfo();  // 新增一个获取用户信息的方法
+  created() {
+    const userInfo = this.getUserInfo()
     if (userInfo != 'null' && userInfo != null) {
-      this.name = userInfo.name;
-      this.id = userInfo.id;
-      console.log('userInfo:' + this.name + '----' + this.id);
+      this.name = userInfo.name
+      this.id = userInfo.id
     } else {
-      this.name = '';
-      this.id = '';
+      this.name = ''
+      this.id = ''
     }
-    this.getTodolist(); // 新增：在组件创建时获取todolist
+    this.getTodolist()
   },
   computed: {
-    // 计算属性用于计算是否已经完成了所有任务
     Done() {
-      let count = 0;
-      let length = this.list.length;
+      let count = 0
+      let length = this.list.length
       for (let i in this.list) {
-        this.list[i].status === 1 ? count += 1 : count += 0;
+        this.list[i].status === 1 ? count += 1 : count += 0
       }
-      this.count = count;
+      this.count = count
       if (count == length || length == 0) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     }
   },
   methods: {
     addTodos() {
-      if (this.todos == '') return;
-      let obj = { status: false, content: this.todos, id: this.id };
-      this.$http.post('/api/todolist', obj) // 新增创建请求
+      if (this.todos == '') return
+      let obj = { status: false, content: this.todos, id: this.id }
+      this.$http.post('/api/todolist', obj)
         .then((res) => {
-          if(res.status == 200){ // 当返回的状态为200成功时
+          if(res.status == 200){
             this.$message({
               type: 'success',
               message: '创建成功！' 
             })
-            this.getTodolist(); // 获得最新的todolist
+            this.getTodolist()
           }else{
-            this.$message.error('创建失败了！'); // 当返回不是200说明处理出问题
+            this.$message.error('创建失败了！')
           }
         }, (err) => {
-          this.$message.error('创建失败啦！'); // 当没有返回值说明服务端错误或者请求没发送出去
-          console.log(err);
+          this.$message.error('创建失败啦！')
+          console.log(err)
         })
-      this.todos = ''; // 将当前todos清空
+      this.todos = ''
     },
     update(index) {
       this.$http.put('/api/todolist/'+ this.id + '/' + this.list[index].id + '/' + this.list[index].status)
@@ -117,7 +115,7 @@ export default {
               type: 'success',
               message: '任务状态更新成功！'
             })
-            this.getTodolist();
+            this.getTodolist()
           }else{
             this.$message.error('任务状态更新失败了！')
           }
@@ -134,7 +132,7 @@ export default {
               type: 'success',
               message: '任务删除成功！'
             })
-            this.getTodolist();
+            this.getTodolist()
           }else{
             this.$message.error('任务删除失败了！')
           }
@@ -143,26 +141,26 @@ export default {
           console.log(err)
         })
     },
-    getUserInfo() {   // 获取用户信息
-      const token = sessionStorage.getItem('demo-token');
+    getUserInfo() {
+      const token = sessionStorage.getItem('demo-token')
       if (token != null && token != 'null') {
-        let decode = jwt.decode(token);       // 解析token
-        return decode; // decode解析出来实际上就是{name: XXX,id: XXX}
+        let decode = jwt.decode(token)
+        return decode
       } else {
-        return null;
+        return null
       }
     },
     getTodolist() {
       this.$http.get('/api/todolist/' + this.id)
         .then((res) => {
           if (res.status == 200) {
-            this.list = res.data;
+            this.list = res.data
           } else {
-            this.$message.error('获取列表失败了！');
+            this.$message.error('获取列表失败了！')
           }
         }, (err) => {
-          this.$message.error('获取列表失败啦！');
-          console.log(err);
+          this.$message.error('获取列表失败啦！')
+          console.log(err)
         })
     }
   }

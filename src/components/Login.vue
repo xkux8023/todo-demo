@@ -28,7 +28,7 @@ export default {
     return {
       account: '',
       password: ''
-    };
+    }
   },
   methods: {
     loginToDo() {
@@ -36,22 +36,22 @@ export default {
         name: this.account,
         password: this.password
       }
-      this.$http.post('/auth/user', obj)  // 将信息发送给后端
-        .then((res) => {                  // axios返回的数据都在res.data里
-          if(res.data.success) {          // 如果成功
-            sessionStorage.setItem('demo-token', res.data.token); // 用sessionStorage把token存下来
-            this.$message({               // 登录成功，显示提示语
+      this.$http.post('/auth/user', obj)
+        .then((res) => {
+          if(res.data.success) {
+            sessionStorage.setItem('demo-token', res.data.token)
+            this.$message({
               type: 'success',
               message: '登录成功！'
-            });
-            this.$router.push('/todolist'); // 进入todolist页面，登录成功
+            })
+            this.$router.push('/todolist')
           } else {
-            this.$message.error(res.data.info); // 登录失败，显示提示语
-            sessionStorage.setItem('demo-token',null); // 将token清空
+            this.$message.error(res.data.info)
+            sessionStorage.setItem('demo-token',null)
           }
         }, (err) => {
-          this.$message.error('请求错误: ' + err);
-          sessionStorage.setItem('demo-token',null); // 将token清空
+          this.$message.error('请求错误: ' + err)
+          sessionStorage.setItem('demo-token',null)
         })
     }
   }
