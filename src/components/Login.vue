@@ -6,7 +6,7 @@
       </span>
       <el-row>
         <el-input 
-          v-model="account" 
+          v-model="name" 
           placeholder="账号"
           type="text">
         </el-input>
@@ -16,6 +16,8 @@
           type="password">
         </el-input>
         <el-button type="primary"  @click="loginToDo">登录</el-button>
+        <p>没有账号，<router-link to="signup">立即注册</router-link>
+        </p>
       </el-row>
     </el-col>
   </el-row>
@@ -26,32 +28,32 @@ export default {
   name: 'Login',
   data () {
     return {
-      account: '',
+      name: '',
       password: ''
     }
   },
   methods: {
     loginToDo() {
       let obj = {
-        name: this.account,
+        name: this.name,
         password: this.password
       }
-      this.$http.post('/auth/user', obj)
+      this.$http.post('/api/login', obj)
         .then((res) => {
           if(res.data.success) {
-            sessionStorage.setItem('demo-token', res.data.token)
+            sessionStorage.setItem('token', res.data.token)
             this.$message({
               type: 'success',
               message: '登录成功！'
             })
-            this.$router.push('/todolist')
+            this.$router.push('/api/todolist')
           } else {
             this.$message.error(res.data.info)
-            sessionStorage.setItem('demo-token',null)
+            sessionStorage.setItem('token',null)
           }
         }, (err) => {
           this.$message.error('请求错误: ' + err)
-          sessionStorage.setItem('demo-token',null)
+          sessionStorage.setItem('token',null)
         })
     }
   }

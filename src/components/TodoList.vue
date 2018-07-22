@@ -62,6 +62,7 @@ export default {
   },
   created() {
     const userInfo = this.getUserInfo()
+    console.log(userInfo)
     if (userInfo != 'null' && userInfo != null) {
       this.name = userInfo.name
       this.id = userInfo.id
@@ -142,13 +143,17 @@ export default {
         })
     },
     getUserInfo() {
-      const token = sessionStorage.getItem('demo-token')
-      if (token != null && token != 'null') {
-        let decode = jwt.decode(token)
-        return decode
-      } else {
-        return null
-      }
+      this.$http.get('/api/user')
+        .then(res => {
+          if (res.data.success) {
+            this.user = res.data.user
+          } else {
+            this.$message({
+              type: 'warning',
+              message: res.data.info
+            })
+          }
+        })
     },
     getTodolist() {
       this.$http.get('/api/todolist/' + this.id)
