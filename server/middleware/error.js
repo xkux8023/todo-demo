@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
-const util = require('util')
-const verify = util.promisify(jwt.verify)
-const secret = require('../config/secret.json')
+const secret = require('./getSecret')
+
 
 /**
  * 判断token是否可用
@@ -9,11 +8,16 @@ const secret = require('../config/secret.json')
 module.exports = function () {
   return async function (ctx, next) {
     try {
-      const token = ctx.header.authorization  // 获取jwt
+      const token = ctx.headers.Authorization  // 获取jwt
+      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++')
+      console.log('token-montherFuck: ' + token)
+      console.log('-------------------------------')
+      console.log('secret-montherFuck: ' + secret)
+      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++')
       if(token) {
         let payload
         try {
-          payload = await verify(token.split(' ')[1], secret.sign)  // 解密payload，获取用户名和ID
+          payload = await jwt.verify(token.split(' ')[1], secret)  // 解密payload，获取用户名和ID
           ctx.user = {
             user_name: payload.name,
             id: payload.id
@@ -22,9 +26,9 @@ module.exports = function () {
           console.log('token verify fail: ', err)
         }
       }
-  
-      
-      console.log(`token: ${ctx.header.token}`)
+
+
+      console.log(`token: ${ctx.headers.token}`)
       await next()
     } catch (err) {
       if (err.status === 401) {
@@ -40,3 +44,8 @@ module.exports = function () {
     }
   }
 }
+
+
+
+
+

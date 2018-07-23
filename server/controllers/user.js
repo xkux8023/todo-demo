@@ -1,12 +1,12 @@
 const userModel = require('../models/user')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-
-const secret = require('../config/secret.json')
+const secret = require('../middleware/getSecret')
+// const secret = require('../config/secret')
 
 
 class UserController {
-  
+
   /**
    * 获取用户信息
    * @param ctx
@@ -14,7 +14,7 @@ class UserController {
    */
   static async getUserInfo (ctx) {
     const id = ctx.params['id']                  // 获取url里传过来的参数里的id
-    const result = await userModel.getTodolistByUserId(id)    // 通过异步查询地返回查询结果
+    const result = await userModel.getUserById(id)    // 通过异步查询地返回查询结果
     ctx.body  = result                        // 将请求的结果放到response的body里返回
   }
 
@@ -25,7 +25,6 @@ class UserController {
    */
   static async createUser(ctx) {
     const user = ctx.request.body
-    console.log(user)
     if (user.password && user.name) {
       const userInfo = await userModel.getUserByName(user.name);
       if (userInfo) {
@@ -46,8 +45,8 @@ class UserController {
           name: newUser.user_name,
           id: newUser.id
         }
-
         const token = jwt.sign(userToken, secret, {expiresIn: '1h'})
+        console.log("token: " + token)
         ctx.body = {
           success: true,
           token: token // 返回token
@@ -77,7 +76,7 @@ class UserController {
           name: userInfo.user_name,
           id: userInfo.id
         }
-        const token = jwt.sign(userToken, secret.sign, {expiresIn: '1h'})  // 签发token
+        const token = jwt.sign(userToken, secret, {expiresIn: '1h'})  // 签发token
         ctx.body = {
           success: true,
           token: token // 返回token
@@ -144,7 +143,7 @@ const postUserAuth = async (ctx) => {
 }
 
 module.exports = {
-  getUserInfo, // 把获取用户信息的方法暴露出去 
+  getUserInfo, // 把获取用户信息的方法暴露出去
   postUserAuth
 }
 

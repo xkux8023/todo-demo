@@ -2,16 +2,16 @@
   <el-row class="content">
     <el-col :xs="24" :sm="{span: 6,offset: 9}">
       <span class="title">
-       欢迎注册 
+       欢迎注册
       </span>
       <el-row>
-        <el-input 
-          v-model="user" 
+        <el-input
+          v-model="user"
           placeholder="账号"
           type="text">
         </el-input>
-        <el-input 
-          v-model="password" 
+        <el-input
+          v-model="password"
           placeholder="密码"
           type="password">
         </el-input>
@@ -43,16 +43,21 @@
             type: 'warning'
           })
         } else {
-          console.log('signup data:' + data.name + '-' + data.password)
           this.$http.post('/api/signup', data)
             .then(res => {
               console.log(res)
-              if (res.status == 200) {
+              if (res.data.success) {
                 const token = res.data.token
                 localStorage.setItem('token', token)
                 // Bearer是JWT的认证头部信息
                 this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
-                this.$router.push('/todolist')
+                this.$message({
+                  message: '注册成功，前往登陆！',
+                  type: 'success'
+                })
+                setTimeout(() => {
+                  this.$router.push('/login')
+                }, 2000)
               } else {
                 this.$message({
                   message: '该用户名已存在!',
@@ -80,5 +85,5 @@
     margin 12px 0
   .el-button
     width 100%
-    margin-top 12px   
+    margin-top 12px
 </style>

@@ -9,7 +9,12 @@ class TodolistController {
    */
   static async getTodolistByUserId (ctx) {            // 获取某个用户的所有todolist
     const id = ctx.params['id']                 // 获取url里传过来的参数里的id
-    const result = await TodolistModel.getTodolistById(id)    // 通过异步查询地返回查询结果
+    console.log('ctx.params：' + ctx.params)
+    console.log('请求事件列表的用户id为：' + id)
+    const result = await TodolistModel.getTodolistByUserId(id)    // 通过异步查询地返回查询结果
+    console.log('====================================');
+    console.log('获取到的事件列表为：' + result);
+    console.log('====================================');
     ctx.body  = result                       // 将请求的结果放到response的body里返回
   }
 
@@ -21,7 +26,7 @@ class TodolistController {
   static async createTodolist (ctx) {         // 给某个用户创建一条todolist
     const data = ctx.request.body                // post请求，数据是在request.body里的
     console.log(data)
-    const result = await todolist.createTodolist(data)
+    const result = await TodolistModel.createTodolist(data)
 
     ctx.body = { success: true }
   }

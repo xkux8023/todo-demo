@@ -37,7 +37,7 @@
                   <el-button size="small" type="primary" @click="update(index)">还原</el-button>
                 </span>
               </div>
-            </template> 
+            </template>
           </template>
         </el-tab-pane>
       </el-tabs>
@@ -62,7 +62,9 @@ export default {
   },
   created() {
     const userInfo = this.getUserInfo()
-    console.log(userInfo)
+    console.log('====================================');
+    console.log('userInfo:' + userInfo.name + ' - '+ userInfo.id);
+    console.log('====================================');
     if (userInfo != 'null' && userInfo != null) {
       this.name = userInfo.name
       this.id = userInfo.id
@@ -96,7 +98,7 @@ export default {
           if(res.status == 200){
             this.$message({
               type: 'success',
-              message: '创建成功！' 
+              message: '创建成功！'
             })
             this.getTodolist()
           }else{
@@ -143,25 +145,25 @@ export default {
         })
     },
     getUserInfo() {
-      this.$http.get('/api/user')
-        .then(res => {
-          if (res.data.success) {
-            this.user = res.data.user
-          } else {
-            this.$message({
-              type: 'warning',
-              message: res.data.info
-            })
-          }
-        })
+      const token = sessionStorage.getItem('token')
+      if (token != null && token != 'null') {
+        let decode = jwt.decode(token)
+        return decode
+      } else {
+        return null
+      }
     },
     getTodolist() {
       this.$http.get('/api/todolist/' + this.id)
         .then((res) => {
-          if (res.status == 200) {
+          console.log(res)
+          if (res.data.success) {
             this.list = res.data
           } else {
-            this.$message.error('获取列表失败了！')
+            this.$message({
+              type: 'success',
+              message: '该用户暂无事件记录！'
+            })
           }
         }, (err) => {
           this.$message.error('获取列表失败啦！')
@@ -188,5 +190,5 @@ export default {
         text-decoration line-through
         color #ddd
   .pull-right
-    float right   
+    float right
 </style>

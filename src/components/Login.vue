@@ -2,16 +2,16 @@
   <el-row class="content">
     <el-col :xs="24" :sm="{span: 6,offset: 9}">
       <span class="title">
-       欢迎登录 
+       欢迎登录
       </span>
       <el-row>
-        <el-input 
-          v-model="name" 
+        <el-input
+          v-model="user"
           placeholder="账号"
           type="text">
         </el-input>
-        <el-input 
-          v-model="password" 
+        <el-input
+          v-model="password"
           placeholder="密码"
           type="password">
         </el-input>
@@ -28,14 +28,14 @@ export default {
   name: 'Login',
   data () {
     return {
-      name: '',
+      user: '',
       password: ''
     }
   },
   methods: {
     loginToDo() {
       let obj = {
-        name: this.name,
+        name: this.user,
         password: this.password
       }
       this.$http.post('/api/login', obj)
@@ -46,9 +46,9 @@ export default {
               type: 'success',
               message: '登录成功！'
             })
-            this.$router.push('/api/todolist')
+            this.$router.push('/todolist')
           } else {
-            this.$message.error(res.data.info)
+            this.$message.error('请求错误: ' + err)
             sessionStorage.setItem('token',null)
           }
         }, (err) => {
@@ -69,5 +69,5 @@ export default {
     margin 12px 0
   .el-button
     width 100%
-    margin-top 12px    
+    margin-top 12px
 </style>

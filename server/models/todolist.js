@@ -26,16 +26,14 @@ class TodolistModel {
    * @returns {Promise.<boolean>}
    */
   static async createTodolist (data) {
-    const todolist = await Todolist.findAll({
-      where: {
-        user_id: id
-      },
-      attributes: ['id', 'content', 'status']     // 只需返回这三个字段的结果即可
+    await Todolist.create({
+      user_id: data.id,
+      content: data.content,
+      status: data.status
     })
-
-    return todolist // 返回数据
+    return true
   }
-  
+
   /**
    * 删除todolist
    * @param id listID

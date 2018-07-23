@@ -5,19 +5,31 @@ const json = require('koa-json')
 const koaJwt = require('koa-jwt')
 const historyApiFallback = require('koa-history-api-fallback')
 const router = require('./server/routers/index')
-const err = require('./server/middleware/error')
-const secret = require('./server/config/secret.json')
- 
+// const err = require('./server/middleware/error')
+const secret = require('./server/middleware/getSecret')
+
+
+
+
 const app = new Koa()
 
 
-app.use(err())
+app.use(function (ctx, next) {
+  return next().catch((err) => {
+    if (401 == err.status) {
+      ctx.status = 401;
+      ctx.body = 'Protected resource, use Authorization header to get access\n';
+    } else {
+      throw err;
+    }
+  })
+})
 app.use(json())
 app.use(logger())
 app.use(bodyparser())
 
 
-app.use(koaJwt({secret: secret.sign}).unless({path: [/^\/api\/login/, /^\/api\/signup/]}))
+app.use(koaJwt({secret: secret}).unless({path: [/^\/api\/login/, /^\/api\/signup/]}))
 
 app
   .use(router.routes())
