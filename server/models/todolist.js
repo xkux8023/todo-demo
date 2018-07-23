@@ -9,10 +9,10 @@ class TodolistModel {
    * @param userId  用户ID
    * @returns {Promise.<*>}
    */
-  static async getTodolistByUserId (id) {
+  static async getTodolistByUserId (userId) {
     const todolist = await Todolist.findAll({
       where: {
-        user_id: id
+        user_id: userId
       },
       attributes: ['id', 'content', 'status']     // 只需返回这三个字段的结果即可
     })

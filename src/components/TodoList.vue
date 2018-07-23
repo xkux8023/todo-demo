@@ -62,9 +62,6 @@ export default {
   },
   created() {
     const userInfo = this.getUserInfo()
-    console.log('====================================');
-    console.log('userInfo:' + userInfo.name + ' - '+ userInfo.id);
-    console.log('====================================');
     if (userInfo != 'null' && userInfo != null) {
       this.name = userInfo.name
       this.id = userInfo.id
@@ -156,8 +153,8 @@ export default {
     getTodolist() {
       this.$http.get('/api/todolist/' + this.id)
         .then((res) => {
-          console.log(res)
-          if (res.data.success) {
+          console.log(res.data)
+          if (res.data.length) {
             this.list = res.data
           } else {
             this.$message({
