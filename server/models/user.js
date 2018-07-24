@@ -51,34 +51,3 @@ class UserModel {
 
 
 module.exports = UserModel
-
-/*
-
-const getUserById = async (id) => {
-  const userInfo = await User.findOne({
-    where: {
-      id: id
-    }
-  });
-
-  return userInfo; // 返回数据
-}
-
-
-const getUserByName = async (name) => {
-  const userInfo = await User.findOne({
-    where: {
-      user_name: name
-    }
-  });
-
-  return userInfo; // 返回数据
-}
-
-
-module.exports = {
-  getUserById,  // 导出getUserById的方法，将会在controller里调用
-  getUserByName
-}
-
-*/

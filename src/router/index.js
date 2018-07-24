@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+// import Vue from 'vue'
+// import VueRouter from 'vue-router'
 import Login from '../components/Login'
 import Signup from '../components/Signup'
 import TodoList from '../components/TodoList'
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 
 const router = new VueRouter({
@@ -35,24 +35,6 @@ const router = new VueRouter({
   ]
 })
 
-
-
-// router.beforeEach((to, from, next) => {
-//   const token = sessionStorage.getItem('token')
-//   if (to.path == '/') {
-//     if (token != 'null' && token != null) {
-//       next('/todolist')
-//     }
-//     next()
-//   } else {
-//     if (token != 'null' && token != null) {
-//       Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-//       next()
-//     } else {
-//       next('/')
-//     }
-//   }
-// })
 
 
 router.beforeEach((to, from, next) => {

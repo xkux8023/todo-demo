@@ -153,8 +153,7 @@ export default {
     getTodolist() {
       this.$http.get('/api/todolist/' + this.id)
         .then((res) => {
-          console.log(res.data)
-          if (res.data.length) {
+          if (res.status === 200) {
             this.list = res.data
           } else {
             this.$message({

@@ -48,7 +48,10 @@ export default {
             })
             this.$router.push('/todolist')
           } else {
-            this.$message.error('请求错误: ' + err)
+            this.$message({
+              message: '请输入正确的用户名或密码!',
+              type: 'warning'
+            })
             sessionStorage.setItem('token',null)
           }
         }, (err) => {

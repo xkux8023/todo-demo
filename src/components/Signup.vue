@@ -45,7 +45,6 @@
         } else {
           this.$http.post('/api/signup', data)
             .then(res => {
-              console.log(res)
               if (res.data.success) {
                 const token = res.data.token
                 localStorage.setItem('token', token)
@@ -57,7 +56,7 @@
                 })
                 setTimeout(() => {
                   this.$router.push('/login')
-                }, 2000)
+                }, 1500)
               } else {
                 this.$message({
                   message: '该用户名已存在!',
